@@ -4,11 +4,11 @@ import { Pelicula } from '../peliculas/pelicula.entity';
 @Entity('generos')
 export class Genero {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ unique: true })
-  nombre: string;
+  nombre!: string;
 
   @OneToMany(() => Pelicula, (pelicula) => pelicula.genero)
-  peliculas: Pelicula[];
+  peliculas!: Pelicula[];
 }

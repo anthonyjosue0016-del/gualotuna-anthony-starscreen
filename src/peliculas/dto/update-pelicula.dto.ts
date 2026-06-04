@@ -27,8 +27,3 @@ export class UpdatePeliculaDto {
   @IsBoolean()
   en_cartelera?: boolean;
 }
-
-  @IsOptional()
-  @IsBoolean()
-  activo?: boolean;
-}

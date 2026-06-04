@@ -3,25 +3,25 @@ import { IsString, IsUUID, IsNumber, IsBoolean, IsOptional, IsNotEmpty, Min } fr
 export class CreatePeliculaDto {
   @IsString()
   @IsNotEmpty()
-  titulo: string;
+  titulo!: string;
 
   @IsString()
   @IsNotEmpty()
-  codigo: string;
+  codigo!: string;
 
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
-  duracion_minutos: number;
+  duracion_minutos!: number;
 
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
-  precio_entrada: number;
+  precio_entrada!: number;
 
   @IsUUID()
   @IsNotEmpty()
-  generoId: string;
+  generoId!: string;
 
   @IsOptional()
   @IsBoolean()

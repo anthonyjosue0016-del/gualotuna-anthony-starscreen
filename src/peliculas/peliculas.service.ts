@@ -7,7 +7,7 @@ import { CreatePeliculaDto } from './dto/create-pelicula.dto';
 import { UpdatePeliculaDto } from './dto/update-pelicula.dto';
 
 export interface EntradaConDescuento {
-  tipo_cliente: 'regular' | 'estudiante' | 'jubilado';
+  tipo_cliente: 'general' | 'estudiante' | 'tercer_edad';
   precio_base: number;
 }
 
@@ -33,7 +33,6 @@ export class PeliculasService {
   ) {}
 
   async create(createPeliculaDto: CreatePeliculaDto) {
-    // Regla 2: Código de película único
     const codigoExistente = await this.peliculaRepository.findOne({ where: { codigo: createPeliculaDto.codigo } });
     if (codigoExistente) {
       throw new ConflictException('El código de película ya existe en el sistema');
@@ -56,27 +55,23 @@ export class PeliculasService {
   async findAll(generoId?: string, enCartelera?: boolean, titulo?: string, codigo?: string, ordenarPor?: string) {
     let query = this.peliculaRepository.createQueryBuilder('pelicula').leftJoinAndSelect('pelicula.genero', 'genero');
 
-    // Filtrar por género (Regla 5)
     if (generoId) {
       query = query.where('pelicula.generoId = :generoId', { generoId });
     }
 
-    // Filtrar por estado en cartelera (Regla 5)
+    
     if (enCartelera !== undefined) {
       query = query.andWhere('pelicula.en_cartelera = :enCartelera', { enCartelera });
     }
 
-    // Búsqueda por título (Regla 5)
     if (titulo) {
       query = query.andWhere('pelicula.titulo ILIKE :titulo', { titulo: `%${titulo}%` });
     }
 
-    // Búsqueda por código (Regla 5)
     if (codigo) {
       query = query.andWhere('pelicula.codigo ILIKE :codigo', { codigo: `%${codigo}%` });
     }
 
-    // Ordenar por duración (Regla 5)
     if (ordenarPor === 'duracion') {
       query = query.orderBy('pelicula.duracion_minutos', 'ASC');
     }
@@ -93,7 +88,6 @@ export class PeliculasService {
   async update(id: string, updatePeliculaDto: UpdatePeliculaDto) {
     const pelicula = await this.findOne(id);
 
-    // Verificar código único si se intenta actualizar
     if (updatePeliculaDto.codigo && updatePeliculaDto.codigo !== pelicula.codigo) {
       const codigoExistente = await this.peliculaRepository.findOne({ where: { codigo: updatePeliculaDto.codigo } });
       if (codigoExistente) {
@@ -116,18 +110,17 @@ export class PeliculasService {
     return this.peliculaRepository.remove(pelicula);
   }
 
-  // Ejercicio for: Calcular descuentos por tipo de cliente
+  
   calcularDescuentosEntradas(entradas: EntradaConDescuento[]): ResumenEntradas {
     const descuentosPorTipo = {
-      regular: 0,
-      estudiante: 15,
-      jubilado: 20,
+      general: 0,
+      estudiante: 20,
+      tercer_edad: 30,
     };
 
-    const detalle = [];
+    const detalle: any[] = [];
     let precioTotal = 0;
 
-    // Usar for para recorrer las entradas
     for (let i = 0; i < entradas.length; i++) {
       const entrada = entradas[i];
       const descuento_pct = descuentosPorTipo[entrada.tipo_cliente] || 0;
@@ -150,26 +143,22 @@ export class PeliculasService {
     };
   }
 
-  // Ejercicio while: Programar funciones según capacidad disponible
+  
   programarFunciones(asientosDisponibles: number, capacidadesStr: string): { funciones_programadas: string[]; asientos_libres: number } {
-    // Convertir cadena de capacidades en lista
     const capacidades = capacidadesStr.split(',').map((c) => parseInt(c.trim(), 10));
 
-    const funcionesProgramadas = [];
+    const funcionesProgramadas: string[] = [];
     let acumulado = 0;
     let indice = 0;
 
-    // Usar while para programar funciones
     while (indice < capacidades.length) {
       const capacidadActual = capacidades[indice];
 
-      // Si la función cabe en los asientos disponibles
       if (acumulado + capacidadActual <= asientosDisponibles) {
         funcionesProgramadas.push(`Función ${indice + 1}`);
         acumulado += capacidadActual;
         indice++;
       } else {
-        // Detener el ciclo si no cabe la función
         break;
       }
     }

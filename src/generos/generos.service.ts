@@ -13,7 +13,6 @@ export class GenerosService {
   ) {}
 
   async create(createGeneroDto: CreateGeneroDto) {
-    // Verificar que el nombre sea único
     const existe = await this.generoRepository.findOne({ where: { nombre: createGeneroDto.nombre } });
     if (existe) {
       throw new ConflictException('El nombre del género ya existe');
@@ -51,7 +50,6 @@ export class GenerosService {
     const genero = await this.generoRepository.findOne({ where: { id }, relations: { peliculas: true } });
     if (!genero) throw new NotFoundException('Género no encontrado');
 
-    // Regla 1: No se puede eliminar un género con películas asociadas
     if (genero.peliculas && genero.peliculas.length > 0) {
       throw new BadRequestException('No se puede eliminar un género que tiene películas asociadas');
     }

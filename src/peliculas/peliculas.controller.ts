@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
-import { PeliculasService, EntradaConDescuento, ResumenEntradas } from './peliculas.service';
+import { PeliculasService, type EntradaConDescuento, type ResumenEntradas } from './peliculas.service';
 import { CreatePeliculaDto } from './dto/create-pelicula.dto';
 import { UpdatePeliculaDto } from './dto/update-pelicula.dto';
 import { IsStaffGuard } from '../common/guards/is-staff.guard';
@@ -43,13 +43,11 @@ export class PeliculasController {
     return this.peliculasService.remove(id);
   }
 
-  // Ejercicio for: Calcular descuentos
   @Post('calcular/descuentos')
   calcularDescuentos(@Body() body: { entradas: EntradaConDescuento[] }): ResumenEntradas {
     return this.peliculasService.calcularDescuentosEntradas(body.entradas);
   }
 
-  // Ejercicio while: Programar funciones
   @Post('programar/funciones')
   programarFunciones(@Body() body: { asientos_disponibles: number; capacidades: string }): { funciones_programadas: string[]; asientos_libres: number } {
     return this.peliculasService.programarFunciones(body.asientos_disponibles, body.capacidades);

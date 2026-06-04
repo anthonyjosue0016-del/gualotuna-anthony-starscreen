@@ -3,14 +3,14 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity('staff')
 export class Staff {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  nombre: string;
+  nombre!: string;
 
   @Column()
-  rol: string;
+  rol!: string;
 
   @Column({ default: true })
-  activo: boolean;
+  activo!: boolean;
 }
