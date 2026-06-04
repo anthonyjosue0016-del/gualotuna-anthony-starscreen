@@ -20,14 +20,17 @@ nest new gualotuna-starscreen-api
 
 
 
-nest generate module categories    / planes
-nest generate controller categories    / planes
-nest generate service categories    / planes
+nest generate module generos    / planes
+nest generate controller generos    / planes
+nest generate service generos    / planes
 
 nest generate module peliculas    / socios
 nest generate controller peliculas    / socios
 nest generate service peliculas    / socios
 
-nest generate module entradas    / services
-nest generate controller entradas    / services
-nest generate service entradas    / services
+nest generate module staff    / services
+nest generate controller staff    / services
+nest generate service staff    / services
+
+
+
